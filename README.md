@@ -5,7 +5,7 @@ Develop a simulator for CPU scheduling algorithms (FCFS, SJF, Round Robin, Prior
 The simulator should allow users to input processes with arrival times, burst times, and priorities and visualize Gantt charts and performance metrics like average waiting time and turnaround time.
 
 # Languages that are used
-- C-lang
+- C++
 
 # Tools
 - git
