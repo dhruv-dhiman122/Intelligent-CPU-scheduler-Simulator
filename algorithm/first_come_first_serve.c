@@ -24,6 +24,19 @@ struct Process {
     float response_time;
 };
 
+inline void Sort(struct Process process[], int n) {
+    struct Process temp;
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n-i-1; j++) {
+            if(process[j].arrival_time > process[j+1].arrival_time) {
+                temp = process[j+1];
+                process[j+1] = process[j];
+                process[j] = temp;
+            }
+        }
+    }
+}
+
 inline void fcfsalgorithm(float arrival_time, float brust_time) {
 
 }
@@ -37,7 +50,7 @@ int main() {
     
     printf("Enter the number of processes\n");
     scanf("%d", &n);
-    struct Process process[n];
+    struct Process* process = (struct Process*)malloc(n * sizeof(struct Process));
     
     for(int i = 0; i < n; i++) { 
         printf("Enter the arrival time for the process %d\n", i+1);
@@ -47,6 +60,6 @@ int main() {
         scanf("%f",&process[i].brust_time);
     }
     
-
+    free(process);
     exit(EXT_SUCCESS);
 }
