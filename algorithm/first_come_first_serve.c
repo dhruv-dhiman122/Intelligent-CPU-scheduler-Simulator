@@ -37,8 +37,8 @@ inline void Sort(struct Process process[], int n) {
     }
 }
 
-inline void fcfsalgorithm(float arrival_time, float brust_time) {
-
+inline void fcfsalgorithm(struct Process process[], int n) {
+    
 }
 
 
