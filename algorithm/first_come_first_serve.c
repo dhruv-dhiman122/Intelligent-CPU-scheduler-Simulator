@@ -24,10 +24,29 @@ struct Process {
     float response_time;
 };
 
+inline void fcfsalgorithm(float arrival_time, float brust_time) {
+
+}
+
 
 //======================================== Space for main function ====================================//
 
 int main() {
+    // asking the user for number of input
+    int n;
+    
+    printf("Enter the number of processes\n");
+    scanf("%d", &n);
+    struct Process process[n];
+    
+    for(int i = 0; i < n; i++) { 
+        printf("Enter the arrival time for the process %d\n", i+1);
+        scanf("%f",&process[i].arrival_time);
+        printf("\n");
+        printf("Enter the brust time for the process %d\n", i+1);
+        scanf("%f",&process[i].brust_time);
+    }
+    
 
     exit(EXT_SUCCESS);
 }
