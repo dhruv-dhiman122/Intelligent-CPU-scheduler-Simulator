@@ -1,3 +1,9 @@
+/*
+ * Priority Scheduling:- This is basically where the computer schedule the process according to their priority order
+ *                       If the priority order is same then it jumps back to FCFS algorithm
+ * */
+
+
 #include <iostream>
 #include <queue>
 #include <cstdlib>
