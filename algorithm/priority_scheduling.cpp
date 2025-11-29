@@ -159,5 +159,9 @@ int main() {
         process.push_back(p);
     }
 
+    priorityScheduling(process);
+
+    printProcessTable(process);
+
     exit(EXT_SUCCESS);
 }
