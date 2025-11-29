@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <vector>
+#include <queue>
 #include <iomanip>
 //============================== user made space for struct and classes ==========================//
 
@@ -53,6 +54,53 @@ void printProcessTable(const std::vector<Process>& process) {
     std::cout << "\nAverage Turnaround Time: " << total_tat / process.size() << std::endl;
     std::cout << "Average Waiting Time: " << total_wt / process.size() << std::endl;
 }
+
+void priorityScheduling(std::vector<Process>& process) {
+    if(process.empty()) return;
+    
+    std::vector<Process> temp = process;
+    std::qsort(&temp[0], temp.size(), sizeof(Process), compareArrival);
+    process = temp;
+
+    std::priority_queue<Process, std::vector<Process>, ComparePrioirty> readyQueue;
+
+    float current_time = 0;
+    int index = 0;
+    int completed = 0;
+    int n= process.size();
+
+    while(completed < n) {
+        while(index < n && process[index].arrival_time <= current_time) {
+            readyQueue.push(process[index]);
+            index++;
+        }
+
+        if(!readyQueue.empty()) {
+            Process current = readyQueue.top();
+            readyQueue.pop();
+
+            current_time += current.burst_time;
+
+            current.completion_time = current_time;
+            current.turnaround_time = current.completion_time - current.arrival_time;
+            current.wait_time = current.turnaround_time - current.burst_time;
+
+            for(auto& p : process) {
+                if(p.pid == current.pid) {
+                    p = current;
+                    break;
+                }
+            }
+            completed++;
+        }
+            else {
+                if(index < n) {
+                    current_time = process[index].arrival_time;
+                }
+            }
+        }
+    }
+
 //============================ Space for main function only ===============================//
 
 int main() {
