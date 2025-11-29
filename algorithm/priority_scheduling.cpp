@@ -125,6 +125,7 @@ int main() {
     // asking the number of processes from the user
     std::cout<<"Enter the number of process"<< std::endl;
     int number_process;
+    std::cin>>number_process;
     if(number_process <= 0) {
         std::cout<<"THE NUMBER OF PROCESS IS NOT VALID"<<"\n";
         exit(EXT_FAILURE);
