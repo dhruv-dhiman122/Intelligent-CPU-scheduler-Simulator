@@ -22,6 +22,15 @@ struct Process {
     float wait_time;
 };
 
+int compareArrival(const void* a, const void * b) {
+    const Process* p1 = (const Process*)a;
+    const Process* p2 = (const Process*)b;
+
+    if(p1->arrival_time < p2->arrival_time) return -1;
+    if(p1->arrival_time > p2->arrival_time) return 1;
+    return 0;
+}
+
 //============================= Space for macro or global variables =====================//
 
 #define EXT_SUCCESS 0
@@ -59,7 +68,7 @@ void priorityScheduling(std::vector<Process>& process) {
     if(process.empty()) return;
     
     std::vector<Process> temp = process;
-    std::qsort(&temp[0], temp.size(), sizeof(Process), compareArrival);
+    td::qsort(&temp[0], temp.size(), sizeof(Process), compareArrival);
     process = temp;
 
     std::priority_queue<Process, std::vector<Process>, ComparePrioirty> readyQueue;
