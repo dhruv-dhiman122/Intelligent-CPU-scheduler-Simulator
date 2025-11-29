@@ -5,11 +5,9 @@
 
 
 #include <iostream>
-#include <queue>
 #include <cstdlib>
 #include <unistd.h>
 #include <vector>
-#include <algorithm>
 #include <iomanip>
 //============================== user made space for struct and classes ==========================//
 
