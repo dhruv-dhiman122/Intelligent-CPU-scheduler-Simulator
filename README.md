@@ -6,6 +6,7 @@ The simulator should allow users to input processes with arrival times, burst ti
 
 # Languages that are used
 - C++
+- C-lang
 
 # Tools
 - git
