@@ -31,6 +31,15 @@ int compareArrival(const void* a, const void * b) {
     return 0;
 }
 
+struct ComparePriority {
+    bool operator()(const Process& p1, const Process& p2) {
+        if(p1.priority == p2.priority) {
+            return p1.arrival_time > p2.arrival_time;
+        }
+        return p1.priority > p2.priority;
+    }
+};
+
 //============================= Space for macro or global variables =====================//
 
 #define EXT_SUCCESS 0
@@ -71,7 +80,7 @@ void priorityScheduling(std::vector<Process>& process) {
     td::qsort(&temp[0], temp.size(), sizeof(Process), compareArrival);
     process = temp;
 
-    std::priority_queue<Process, std::vector<Process>, ComparePrioirty> readyQueue;
+    std::priority_queue<Process, std::vector<Process>, ComparePriority> readyQueue;
 
     float current_time = 0;
     int index = 0;
