@@ -9,6 +9,8 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <vector>
+#include <algorithm>
+#include <iomanip>
 //============================== user made space for struct and classes ==========================//
 
 struct Process {
@@ -28,8 +30,31 @@ struct Process {
 
 //================================ Space for user defined functions ========================//
 
+void printProcessTable(const std::vector<Process>& process) {
+    std::cout<<"\nProcess Table:\n";
+    std::cout << std::setw(5) << "PID" << std::setw(10) << "Priority" 
+              << std::setw(12) << "Arrival" << std::setw(10) << "Burst"
+              << std::setw(12) << "Complete" << std::setw(12) << "Turnaround"
+              << std::setw(10) << "Wait" << std::endl;
+    std::cout << std::string(70, '-') << std::endl;
 
+    float total_tat = 0, total_wt = 0;
 
+    for(const auto& p : process) {
+        std::cout << std::setw(5) << p.pid 
+                  << std::setw(10) << p.priority
+                  << std::setw(12) << p.arrival_time
+                  << std::setw(10) << p.burst_time
+                  << std::setw(12) << p.completion_time
+                  << std::setw(12) << p.turnaround_time
+                  << std::setw(10) << p.wait_time << std::endl;
+        
+        total_tat += p.turnaround_time;
+        total_wt += p.wait_time;       
+    }
+    std::cout << "\nAverage Turnaround Time: " << total_tat / process.size() << std::endl;
+    std::cout << "Average Waiting Time: " << total_wt / process.size() << std::endl;
+}
 //============================ Space for main function only ===============================//
 
 int main() {
