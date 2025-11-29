@@ -77,7 +77,7 @@ void priorityScheduling(std::vector<Process>& process) {
     if(process.empty()) return;
     
     std::vector<Process> temp = process;
-    td::qsort(&temp[0], temp.size(), sizeof(Process), compareArrival);
+    qsort(&temp[0], temp.size(), sizeof(Process), compareArrival);
     process = temp;
 
     std::priority_queue<Process, std::vector<Process>, ComparePriority> readyQueue;
