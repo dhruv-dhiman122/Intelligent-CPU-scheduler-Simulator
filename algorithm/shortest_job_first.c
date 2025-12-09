@@ -13,6 +13,15 @@
 #define EXT_SUCCESS 0
 #define EXT_FAILURE 1
 
+struct Process {
+    long pid;
+    float arrival_time;
+    float burst_time;
+    float wait_time;
+    float completion_time;
+    float turnAround_time;
+};
+
 //==================================================== Space for user defined function ============================================//
 
 
