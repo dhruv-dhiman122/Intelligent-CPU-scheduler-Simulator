@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CPU Scheduling Simulator</title>
+<style>
+:root {
+  --bg:#0d1117; --card:#161b22; --border:#30363d;
+  --accent:#007bff; --muted:#9198a1;
+  --ok:#2ea043; --danger:#da3633;
+}
+body {
+  background: var(--bg);
+  color: #fff;
+  font-family: "Segoe UI", sans-serif;
+  margin: 20px;
+}
+.container { max-width: 900px; margin: auto; }
+h1 {
+  text-align:center;
+  font-size:32px;
+  margin-bottom:5px;
+  color: var(--accent);
+}
+.sub { text-align:center; color:var(--muted); margin-bottom:20px; }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+label { color: var(--muted); font-size:14px; }
+
+select, input {
+  width: 100%;
+  padding: 10px;
+  background:#0d1117;
+  color:white;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  margin-top:5px;
+}
+
+.btn {
+  padding:10px 14px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.btn-add { background: var(--ok); color:white; }
+.btn-remove { background: var(--danger); color:white; padding: 6px 10px; }
+.btn-run { width:100%; background: var(--accent); color:white; font-size:16px; }
+
+.process-box {
+  display:flex;
+  gap:10px;
+  margin-bottom:12px;
+}
+.process-box input { flex:1; }
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>⚙ CPU Scheduling Simulator</h1>
+<p class="sub">FCFS • SJF(NP/P) • Priority(NP/P) • Round Robin</p>
+
+<!-- Algorithm Selection -->
+<div class="card">
+  <label>Select Algorithm</label>
+  <select id="algo" onchange="onAlgoChange()">
+    <option value="" disabled selected>Choose...</option>
+    <option value="fcfs">FCFS (Non-Preemptive)</option>
+    <option value="sjf-np">SJF (Non-Preemptive)</option>
+    <option value="sjf-p">SJF (Preemptive)</option>
+    <option value="priority-np">Priority (Non-Preemptive)</option>
+    <option value="priority-p">Priority (Preemptive)</option>
+    <option value="rr">Round Robin</option>
+  </select>
+
+  <div id="priorityWrap" style="display:none; margin-top:12px;">
+    <label>Priority Order</label>
+    <select id="priorityOrder">
+      <option value="high">Higher number = Higher priority</option>
+      <option value="low">Lower number = Higher priority</option>
+    </select>
+  </div>
+
+  <div id="quantumWrap" style="display:none; margin-top:12px;">
+    <label>Quantum</label>
+    <input id="quantum" type="number" min="1" placeholder="e.g. 2">
+  </div>
+</div>
+
+<!-- Processes -->
+<div class="card">
+  <div style="display:flex; justify-content:space-between;">
+    <h3>Processes</h3>
+    <span style="color:var(--muted); font-size:12px;">Click + Add Process</span>
+  </div>
+
+  <div id="processList"></div>
+
+  <button class="btn btn-add" onclick="addProcess()">+ Add Process</button>
+  <button class="btn" onclick="clearAll()">Clear</button>
+</div>
+
+<!-- Run button -->
+<div class="card">
+  <button class="btn btn-run" onclick="runScheduler()">▶ Run Algorithm</button>
+</div>
+
+</div>
+
+<script>
+// ----------------------- UI Logic -----------------------
+let procCount = 0;
+
+function onAlgoChange() {
+  const algo = document.getElementById("algo").value;
+  document.getElementById("priorityWrap").style.display =
+     algo.startsWith("priority") ? "block" : "none";
+  document.getElementById("quantumWrap").style.display =
+     algo === "rr" ? "block" : "none";
+
+  document.querySelectorAll(".priority-field").forEach(el => 
+      el.style.display = algo.startsWith("priority") ? "block" : "none"
+  );
+}
+
+function addProcess() {
+  procCount++;
+  const div = document.createElement("div");
+  div.className = "process-box";
+  div.id = "proc" + procCount;
+
+  div.innerHTML = `
+      <input class="at" type="number" placeholder="Arrival Time">
+      <input class="bt" type="number" placeholder="Burst Time">
+      <input class="priority-field" type="number" placeholder="Priority" style="display:none;">
+      <button class="btn-remove" onclick="removeProcess('${div.id}')">X</button>
+  `;
+  document.getElementById("processList").appendChild(div);
+}
+
+function removeProcess(id) {
+  document.getElementById(id)?.remove();
+}
+
+function clearAll() {
+  document.getElementById("processList").innerHTML = "";
+  procCount = 0;
+}
+
+function collectProcesses() {
+  const rows = [...document.querySelectorAll(".process-box")];
+  let pid = 1;
+  const lines = [];
+
+  for (const r of rows) {
+    const at = r.querySelector(".at").value;
+    const bt = r.querySelector(".bt").value;
+    const pr = r.querySelector(".priority-field").value || 0;
+
+    if(at === "" || bt === "")
+      throw Error("Fill AT & BT for all processes");
+
+    lines.push(`${pid} ${parseInt(at)} ${parseInt(bt)} ${parseInt(pr)}`);
+    pid++;
+  }
+  return lines.join(";");
+}
+
+// ------------------ RUN ALGORITHM (Electron IPC) ------------------
+function runScheduler() {
+  try {
+    const algo = document.getElementById("algo").value;
+    if (!algo) { alert("Select algorithm"); return; }
+
+    const payload = {
+      algo,
+      processData: collectProcesses(),
+      quantum: document.getElementById("quantum")?.value || "2",
+      priorityOrder: document.getElementById("priorityOrder")?.value || "high"
+    };
+
+    window.api.runScheduler(payload);
+
+  } catch (err) {
+    alert("Error: " + err.message);
+  }
+}
+
+// Receive result from Electron → go to result page
+window.api.onResult((result)=>{
+  localStorage.setItem("resultData", JSON.stringify(result));
+  window.location.href = "result.html";
+});
+
+</script>
+</body>
+</html>
