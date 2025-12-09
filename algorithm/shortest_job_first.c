@@ -24,8 +24,16 @@ struct Process {
 
 //==================================================== Space for user defined function ============================================//
 
-void Sort(struct Process* process) {
-    
+void Sort(struct Process* process, int number) {
+    for(int i = 0; i < number; i++) {
+        for(int j = 0; j < number-i-1; j++) {
+            if(process[j].burst_time > process[j+1].burst_time) {
+                struct Process temp = process[j];
+                process[j] = process[j+1];
+                process[j+1] = temp;
+            }
+        }
+    }
 }
 
 //================================================== Space for main function ========================================================//
