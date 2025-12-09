@@ -24,7 +24,9 @@ struct Process {
 
 //==================================================== Space for user defined function ============================================//
 
-
+void Sort(struct Process* process) {
+    
+}
 
 //================================================== Space for main function ========================================================//
 int main() {
@@ -44,10 +46,15 @@ int main() {
     
     //taking input from the user
     for(int i = 0; i < numberProcess; i++) {
+        process[i].pid = i+1;
         printf("\nEnter the arrival time for the process %d\t",i+1);
-        scanf("%f",&process->arrival_time);
+        scanf("%f",&process[i].arrival_time);
         printf("\nEnter the brust time for the process %d\t",i+1);
-        scanf("%f",&process->burst_time);
+        scanf("%f",&process[i].burst_time);
+        //making them zero
+        process[i].wait_time  = 0;
+        process[i].completion_time = 0;
+        process[i].turnAround_time = 0;
     }
     printf("Done!!\n");
 
