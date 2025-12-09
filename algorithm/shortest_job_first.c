@@ -40,8 +40,16 @@ int main() {
         exit(EXT_FAILURE_NO_PROCESS);
     }
 
-    struct Process* process = (struct Process *)malloc(numberProcess * sizeof(struct Process));
-
+    struct Process* process = (struct Process *)malloc(numberProcess * sizeof(struct Process)); // allocating the memory
+    
+    //taking input from the user
+    for(int i = 0; i < numberProcess; i++) {
+        printf("\nEnter the arrival time for the process %d\t",i+1);
+        scanf("%f",&process->arrival_time);
+        printf("\nEnter the brust time for the process %d\t",i+1);
+        scanf("%f",&process->burst_time);
+    }
+    printf("Done!!\n");
 
     
     //freeing the pointer and not giving chance to be a dangling pointer
