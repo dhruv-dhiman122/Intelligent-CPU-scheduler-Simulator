@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CPU Scheduling Result</title>
+
+<style>
+:root {
+  --bg:#0d1117; --card:#161b22; --border:#30363d;
+  --accent:#007bff; --muted:#9198a1;
+  --ok:#2ea043;
+}
+body {
+  background: var(--bg);
+  color:white;
+  font-family:"Segoe UI";
+  margin:20px;
+}
+.container {
+  max-width: 1000px;
+  margin:auto;
+}
+.card {
+  background:var(--card);
+  border:1px solid var(--border);
+  padding:18px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+.btn {
+  padding:10px 16px;
+  background: var(--accent);
+  color:white;
+  border:none; border-radius:8px;
+  cursor:pointer;
+}
+.gantt-bar {
+  display:inline-block;
+  padding:6px 14px;
+  color:black;
+  font-weight:bold;
+  margin-right:4px;
+  border-radius:6px;
+}
+.table {
+  width:100%;
+  border-collapse: collapse;
+}
+.table th, .table td {
+  padding:8px;
+  border-bottom:1px solid var(--border);
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<button onclick="goBack()" class="btn">← Back</button>
+
+<div id="header" class="card"></div>
+
+<div class="card">
+  <h3>Gantt Chart</h3>
+  <div id="gantt"></div>
+  <div id="timeline" style="margin-top:10px; color:var(--muted);"></div>
+</div>
+
+<div class="card">
+  <h3>Ready Queue Timeline</h3>
+  <div id="ready"></div>
+</div>
+
+<div class="card">
+  <h3>Process Table</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>PID</th><th>AT</th><th>BT</th><th>PR</th>
+        <th>CT</th><th>TAT</th><th>WT</th><th>RT</th>
+      </tr>
+    </thead>
+    <tbody id="procTable"></tbody>
+  </table>
+</div>
+
+</div>
+
+<script>
+
+function goBack(){ window.location.href="index.html"; }
+
+function color(pid){
+  const colors=["#58a6ff","#2ea043","#f59e0b","#e11d48",
+                "#a855f7","#14b8a6","#f97316","#10b981"];
+  return colors[(pid-1)%colors.length];
+}
+
+const data = JSON.parse(localStorage.getItem("resultData") || "{}");
+
+document.getElementById("header").innerHTML = `
+  <h2>${data.algorithm.toUpperCase()}</h2>
+  <p>Total Time: ${data.totalTime}</p>
+  <p>Processes: ${data.processes?.length || 0}</p>
+`;
+
+let ghtml="";
+let thtml="";
+
+if(data.gantt){
+  data.gantt.forEach(seg=>{
+    ghtml += `<span class="gantt-bar" 
+                 style="background:${color(seg.pid)};">
+                 P${seg.pid}
+              </span>`;
+  });
+
+  for(let t=0;t<=data.totalTime;t++){
+    thtml += `<span style="margin-right:8px;">${t}</span>`;
+  }
+}
+
+document.getElementById("gantt").innerHTML = ghtml;
+document.getElementById("timeline").innerHTML = thtml;
+
+// READY QUEUE
+let rhtml="";
+if(data.readyQueueTimeline?.length){
+  data.readyQueueTimeline.forEach(t=>{
+    rhtml += `<div style="margin-bottom:4px;">
+                <b>t=${t.time}:</b> 
+                ${t.ready.length ? t.ready.join(", ") : "Empty"}
+              </div>`;
+  });
+} else {
+  rhtml = "No ready queue data";
+}
+document.getElementById("ready").innerHTML = rhtml;
+
+// TABLE
+let tbody="";
+data.processes?.forEach(p=>{
+  tbody += `
+    <tr>
+      <td>${p.pid}</td>
+      <td>${p.arrival}</td>
+      <td>${p.burst}</td>
+      <td>${p.priority}</td>
+      <td>${p.completion}</td>
+      <td>${p.tat}</td>
+      <td>${p.wt}</td>
+      <td>${p.rt}</td>
+    </tr>`;
+});
+document.getElementById("procTable").innerHTML = tbody;
+
+</script>
+</body>
+</html>
