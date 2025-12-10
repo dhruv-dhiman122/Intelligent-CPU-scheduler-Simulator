@@ -116,6 +116,10 @@ int main() {
 
     //calling function
     
+    Sort(process, numberProcess);
+
+    scheduling(process, numberProcess);
+
     //freeing the pointer and not giving chance to be a dangling pointer
     free(process);
     process = NULL;
