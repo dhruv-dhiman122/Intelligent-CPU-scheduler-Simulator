@@ -1,5 +1,8 @@
 /*
  * Aim of the file -> The files major aim is write code for shortest job first
+ *
+ * Idea of shortest job first
+ *      The idea behind algorithm is that it short the process according to the burst time
  * */
 
 
@@ -13,6 +16,7 @@
 #define EXT_SUCCESS 0
 #define EXT_FAILURE 1
 #define EXT_FAILURE_NO_PROCESS 1
+
 struct Process {
     long pid;
     float arrival_time;
