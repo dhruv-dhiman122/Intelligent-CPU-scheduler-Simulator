@@ -62,7 +62,7 @@ int main() {
         printf("\nEnter the arrival time for the process %d\t",i+1);
         scanf("%f",&process[i].arrival_time);
         
-        if(process[i].arrival_time == 0.0) { // setting the arrival time for respective process as zero
+        if(process[i].arrival_time <= 0.0) { // setting the arrival time for respective process as zero
             printf("There was no arrival time set for %d. Thus, making it default value of zero\n",i+1);
             process[i].arrival_time = 0;
         }
