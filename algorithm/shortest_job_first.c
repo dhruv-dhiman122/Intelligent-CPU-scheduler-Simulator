@@ -36,8 +36,46 @@ void Sort(struct Process* process, int number) { // sorting according to the bur
     }
 }
 
-void scheduling(struct Process* process) { 
-    
+void scheduling(struct Process* process, int n) { 
+    int completed = 0;
+    float current_time = 0;
+    int isCompleted[n];
+
+    for(int i = 0; i < n; i++) {
+        isCompleted[i] = 0;
+    }
+
+    while(completed < n) {
+        int idx = -1;
+        float minBurst = 1e9;
+
+        for(int i = 0; i < n; i++) {
+            if(process[i].arrival_time <= current_time && !isCompleted[i]) {
+                if(process[i].burst_time < minBurst) {
+                    minBurst = process[i].burst_time;
+                    idx = i;
+                }
+            }
+        }
+
+        if(idx != -1) {
+            float startTime = (current_time > process[idx].arrival_time) ? current_time : process[idx].arrival_time;
+            
+            process[idx].completion_time = startTime + process[idx].burst_time;
+            process[idx].turnAround_time = process[idx].completion_time - process[idx].arrival_time;
+            process[idx].wait_time = process[idx].turnAround_time - process[idx].burst_time;
+            current_time = process[idx].completion_time;
+
+            isCompleted[idx] = 1;
+            completed++;
+
+            printf("process = %ld, Arrival Time = %.2f, Brust time = %.2f, start = %.2f, completion time = %.2f, turn around time = %.2f, waiting time = %.2f\n", process[idx].pid, process[idx].arrival_time, process[idx].burst_time, startTime, process[idx].completion_time,
+                    process[idx].turnAround_time, process[idx].wait_time);
+        }
+        else {
+            current_time++;
+        }
+    }
 }
 
 //================================================== Space for main function ========================================================//
