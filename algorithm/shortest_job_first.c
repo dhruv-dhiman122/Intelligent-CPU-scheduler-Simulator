@@ -24,7 +24,7 @@ struct Process {
 
 //==================================================== Space for user defined function ============================================//
 
-void Sort(struct Process* process, int number) {
+void Sort(struct Process* process, int number) { // sorting according to the burst time
     for(int i = 0; i < number; i++) {
         for(int j = 0; j < number-i-1; j++) {
             if(process[j].burst_time > process[j+1].burst_time) {
@@ -34,6 +34,10 @@ void Sort(struct Process* process, int number) {
             }
         }
     }
+}
+
+void scheduling(struct Process* process) { 
+    
 }
 
 //================================================== Space for main function ========================================================//
@@ -57,6 +61,12 @@ int main() {
         process[i].pid = i+1;
         printf("\nEnter the arrival time for the process %d\t",i+1);
         scanf("%f",&process[i].arrival_time);
+        
+        if(process[i].arrival_time == 0.0) { // setting the arrival time for respective process as zero
+            printf("There was no arrival time set for %d. Thus, making it default value of zero\n",i+1);
+            process[i].arrival_time = 0;
+        }
+
         printf("\nEnter the brust time for the process %d\t",i+1);
         scanf("%f",&process[i].burst_time);
         //making them zero
@@ -66,6 +76,7 @@ int main() {
     }
     printf("Done!!\n");
 
+    //calling function
     
     //freeing the pointer and not giving chance to be a dangling pointer
     free(process);
