@@ -16,7 +16,7 @@
 //======================================= Sapce for user-defined function ============================//
 
 struct Process {
-    long long pid;
+    int pid;
     float arrival_time;
     float brust_time;
     float waiting_time;
@@ -61,7 +61,7 @@ void displayResults(struct Process processes[], int n) {
     printf("PID\tArrival\tBurst\tCompletion\tTurnaround\tWaiting\n");
     
     for (int i = 0; i < n; i++) {
-        printf("%lld\t%f\t%f\t%f\t\t%f\t\t%f\n",
+        printf("%d\t%f\t%f\t%f\t\t%f\t\t%f\n",
                processes[i].pid,
                processes[i].arrival_time,
                processes[i].brust_time,
