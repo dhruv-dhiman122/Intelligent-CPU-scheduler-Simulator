@@ -17,6 +17,24 @@ extern void priority_scheduler(Process process[], int n);
 
 //=============================================== Space for user defined function ====================================//
 
+void print_result(Process process[], int n, const char* algorithm_name) {
+    printf("\n=============================================");
+    printf("%s scheduling result\n", algorithm_name);
+    printf("===============================================\n");
+    printf("PID | Arrival | Burst | Priority | Waiting | turn around time\n");
+
+    float total_waiting = 0, total_turnaround = 0;
+
+    for(int i = 0; i < n; i++) {
+        printf("%3d | %7f | %5f | %8d | %7f | %10f\n", process[i].pid, process[i].arrival_time, process[i].burst_time, process[i].priority, process[i].wait_time, process[i].turnAround_time);
+
+        total_waiting = process[i].wait_time;
+        total_turnaround = process[i].turnAround_time;
+    }
+    printf("\nStatistics:\n");
+    printf("Avg Waiting time: %.2f\n", total_waiting / n);
+    printf("Avg turn around time %.2f\n", total_turnaround / n);
+}
 
 //============================================= Space for main function ========================================//
 int main() {
