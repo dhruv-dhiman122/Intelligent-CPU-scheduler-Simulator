@@ -36,6 +36,12 @@ void print_result(Process process[], int n, const char* algorithm_name) {
     printf("Avg turn around time %.2f\n", total_turnaround / n);
 }
 
+void copy_process_array(Process dest[], Process src[], int n) {
+    for(int i = 0; i < n; i++)  {
+        dest[i] = src[i];
+    }
+}
+
 //============================================= Space for main function ========================================//
 int main() {
     
