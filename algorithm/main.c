@@ -44,6 +44,46 @@ void copy_process_array(Process dest[], Process src[], int n) {
 
 //============================================= Space for main function ========================================//
 int main() {
+    // ======== ADD THIS SECTION ========
+    // Define test data FIRST
+    Process test_processes[] = {
+        {1, 0.0, 10.0, 3, 0.0, 0.0, 0.0},
+        {2, 1.0, 5.0, 1, 0.0, 0.0, 0.0},
+        {3, 2.0, 8.0, 4, 0.0, 0.0, 0.0}
+    };
     
+    int n = sizeof(test_processes) / sizeof(test_processes[0]);
+    // ==================================
+    
+    printf("🚀 CPU Scheduler Simulator\n");
+    printf("============================\n");
+    printf("Testing with %d processes\n\n", n);
+    
+    // Create copies for each scheduler
+    Process fcfs_copy[n], sjf_copy[n], rr_copy[n], priority_copy[n];
+    
+    copy_process_array(fcfs_copy, test_processes, n);
+    copy_process_array(sjf_copy, test_processes, n);
+    copy_process_array(rr_copy, test_processes, n);
+    copy_process_array(priority_copy, test_processes, n);
+    
+    // Run all schedulers
+    printf("1️⃣  Running FCFS...\n");
+    fcfs_scheduler(fcfs_copy, n);
+    print_result(fcfs_copy, n, "FCFS");
+    
+    printf("\n2️⃣  Running SJF...\n");
+    sjf_scheduler(sjf_copy, n);
+    print_result(sjf_copy, n, "SJF");
+    
+    printf("\n3️⃣  Running Round Robin (Quantum = 2)...\n");
+    round_robin_scheduler(rr_copy, n, 2);
+    print_result(rr_copy, n, "Round Robin");
+    
+    printf("\n4️⃣  Running Priority...\n");
+    priority_scheduler(priority_copy, n);
+    print_result(priority_copy, n, "Priority");
+    
+    printf("\n✅ All schedulers completed successfully!\n");
     exit(EXT_SUCCESS);
 }
