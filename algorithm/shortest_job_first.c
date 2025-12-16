@@ -18,7 +18,7 @@
 #define EXT_FAILURE_NO_PROCESS 1
 
 struct Process {
-    long pid;
+    int pid;
     float arrival_time;
     float burst_time;
     float wait_time;
@@ -73,7 +73,7 @@ void scheduling(struct Process* process, int n) {
             isCompleted[idx] = 1;
             completed++;
 
-            printf("process = %ld, Arrival Time = %.2f, Brust time = %.2f, start = %.2f, completion time = %.2f, turn around time = %.2f, waiting time = %.2f\n", process[idx].pid, process[idx].arrival_time, process[idx].burst_time, startTime, process[idx].completion_time,
+            printf("process = %d, Arrival Time = %.2f, Brust time = %.2f, start = %.2f, completion time = %.2f, turn around time = %.2f, waiting time = %.2f\n", process[idx].pid, process[idx].arrival_time, process[idx].burst_time, startTime, process[idx].completion_time,
                     process[idx].turnAround_time, process[idx].wait_time);
         }
         else {
